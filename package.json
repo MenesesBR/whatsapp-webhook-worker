@@ -1,0 +1,19 @@
+{
+    "name": "whatsapp-worker",
+    "version": "1.0.0",
+    "description": "Worker para processar mensagens da fila BullMQ",
+    "main": "jobs/worker.js",
+    "scripts": {
+      "start": "node jobs/worker.js",
+      "dev": "nodemon jobs/worker.js"
+    },
+    "dependencies": {
+      "bullmq": "^4.15.1",
+      "dotenv": "^16.4.5",
+      "ioredis": "^5.4.1"
+    },
+    "devDependencies": {
+      "nodemon": "^3.0.2"
+    }
+  }
+  
