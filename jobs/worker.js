@@ -2,7 +2,7 @@ const { Worker, QueueEvents } = require('bullmq');
 const Redis = require('ioredis');
 require('dotenv').config();
 
-const redis = new Redis(process.env.REDIS_URL);
+const redis = new Redis(process.env.REDIS_URL + '?family=0');
 
 async function listenToAllQueues() {
   const keys = await redis.keys('bull:messages:*:id');
