@@ -1,5 +1,6 @@
 const { Worker, QueueEvents, Queue } = require('bullmq');
 const redis = require('../config/redis');
+const blipSdkApi = require('./callBlipSkdApi');
 require('dotenv').config();
 
 const redisConnection = redis.connection()
@@ -13,7 +14,7 @@ const INACTIVITY_LIMIT_MS = 1800000; // 30 minutos 1800000
 async function listenToAllQueues() {
     while (true) {
         const keys = await redisConnection.keys('bull:messages:*:id');
-        await new Promise(resolve => setTimeout(resolve, 100)); // Espera 0.1 segundo antes de verificar novamente
+        await new Promise(resolve => setTimeout(resolve, 50)); // Espera 0.1 segundo antes de verificar novamente
         await queueHandler(keys);
     }
 }
@@ -39,7 +40,8 @@ async function createWorker(queueName) {
         // Atualiza o tempo da última atividade
         lastActivityMap.set(queueName, Date.now());
 
-        // Sua lógica real vai aqui
+        await blipSdkApi.callBlipSdkMessagesApi(job.data)
+
     }, {
         connection: redis.connection(),
     });
