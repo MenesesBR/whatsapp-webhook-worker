@@ -4,10 +4,8 @@ const userInfo = new Map();
 
 async function callBlipSdkMessagesApi(blipSdkRequest) {
     try {
-        // Aguardar a obtenção do token
         blipSdkRequest.headers.Authorization = await getJwtToken();
 
-        // Aguardar a chamada da API
         const response = await axios.post(
             `${process.env.BLIP_SDK_API_BASE_URL}/api/blip/messages`,
             blipSdkRequest.data,
@@ -38,7 +36,6 @@ async function getJwtToken() {
 
         if (jwtToken) {
             try {
-                // Aguardar a verificação do token
                 const checkJwtToken = await axios.get(`${process.env.BLIP_SDK_API_BASE_URL}/api/health`, {
                     headers: { 'Authorization': jwtToken }
                 });
@@ -47,12 +44,10 @@ async function getJwtToken() {
                     return jwtToken;
                 }
             } catch (error) {
-                // Limpar token inválido
-                userInfo.delete(BLIP_SDK_API_JWT_USER_NAME);
+                userInfo.delete(process.env.BLIP_SDK_API_JWT_USER_NAME);
             }
         }
 
-        // Aguardar a obtenção de um novo token
         const jwtTokenResponse = await axios.post(
             `${process.env.BLIP_SDK_API_BASE_URL}/api/auth/login`,
             {
